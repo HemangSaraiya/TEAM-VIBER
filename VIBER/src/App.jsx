@@ -31,24 +31,30 @@ export default function App() {
           setUser(data.user);
           setIsAuthenticated(true);
         } else {
-          localStorage.removeItem('token');
+          handleLogout();
         }
       })
       .catch(() => {
-        localStorage.removeItem('token');
+        handleLogout();
       });
+    } else {
+      // If no token exists and they are on a protected route, boot them
+      const currentPath = window.location.pathname;
+      if (['/dashboard', '/resources', '/messages', '/profile'].some(p => currentPath.startsWith(p))) {
+        navigate('/login');
+      }
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
-    navigate('/');
+    navigate('/login');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-slate-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 text-slate-900">
       <Navbar isAuthenticated={isAuthenticated} user={user} onLogout={handleLogout} />
       
       <AnimatePresence mode="wait">

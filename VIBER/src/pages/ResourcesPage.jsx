@@ -8,6 +8,8 @@ export default function ResourcesPage({ user }) {
   const [showNewPostModal, setShowNewPostModal] = useState(false);
   const [newPostContent, setNewPostContent] = useState({ title: '', type: 'Offer', tags: '' });
 
+  const [searchQuery, setSearchQuery] = useState('');
+
   const fetchResources = async () => {
     try {
       const res = await fetch('/api/resources');
@@ -21,6 +23,15 @@ export default function ResourcesPage({ user }) {
   useEffect(() => {
     fetchResources();
   }, []);
+
+  // Filter resources safely based on exact case-insensitive matches
+  const filteredResources = resources.filter(res => {
+    const titleMatch = (res.title || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const tagsMatch = Array.isArray(res.tags) 
+                      ? res.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+                      : (res.tags || '').toLowerCase().includes(searchQuery.toLowerCase());
+    return titleMatch || tagsMatch;
+  });
 
   const handleDeleteResource = async (id) => {
     try {
@@ -57,18 +68,27 @@ export default function ResourcesPage({ user }) {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-black via-zinc-900 to-slate-900 overflow-hidden">
-      <Sidebar activeTab="resources" />
+    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 overflow-hidden">
+      <Sidebar activeTab="resources" onPostResource={() => setShowNewPostModal(true)} />
       
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="h-20 border-b border-white/5 px-8 flex items-center justify-between backdrop-blur-md">
+        <header className="h-20 border-b border-slate-100 px-8 flex items-center justify-between backdrop-blur-md">
           <h1 className="text-2xl font-bold gradient-text">Resources Directory</h1>
           <div className="flex items-center gap-4">
-            <button onClick={() => setShowNewPostModal(true)} className="px-6 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl font-medium">
+            <div className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Search resources..."
+                className="bg-white shadow-sm border border-slate-200 rounded-2xl px-4 py-2 text-sm placeholder-slate-500 focus:border-orange-500/50"
+              />
+            </div>
+            <button onClick={() => setShowNewPostModal(true)} className="px-6 py-2 bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl font-medium text-white shadow-sm">
               + New Post
             </button>
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center font-bold text-white">
+            <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-500 text-white flex justify-center items-center rounded-full font-bold">
               {user?.avatar || 'JD'}
             </div>
           </div>
@@ -78,13 +98,17 @@ export default function ResourcesPage({ user }) {
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           <div className="max-w-7xl mx-auto space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {resources.map((resource) => (
-                <ResourceCard 
-                  key={resource.id} 
-                  {...resource} 
-                  onDelete={user?.name === resource.author ? () => handleDeleteResource(resource.id) : undefined}
-                />
-              ))}
+              {filteredResources.length === 0 ? (
+                <div className="text-slate-500 col-span-full py-12 text-center text-lg">No resources matched your search query in the directory.</div>
+              ) : (
+                filteredResources.map((resource) => (
+                  <ResourceCard 
+                    key={resource.id} 
+                    {...resource} 
+                    onDelete={user?.name === resource.author ? () => handleDeleteResource(resource.id) : undefined}
+                  />
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -98,28 +122,28 @@ export default function ResourcesPage({ user }) {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-zinc-900 border border-white/10 p-6 rounded-2xl w-full max-w-md"
+              className="bg-white border border-slate-200 p-6 rounded-2xl w-full max-w-md"
             >
               <h2 className="text-xl font-bold mb-4">Create New Opportunity</h2>
               <form onSubmit={handleCreateResource} className="space-y-4">
                 <div>
-                  <label className="block text-sm text-zinc-400 mb-1">Title</label>
-                  <input required value={newPostContent.title} onChange={e => setNewPostContent({...newPostContent, title: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2" placeholder="Ex: Need a Study Buddy" />
+                  <label className="block text-sm text-slate-600 mb-1">Title</label>
+                  <input required value={newPostContent.title} onChange={e => setNewPostContent({...newPostContent, title: e.target.value})} className="w-full bg-white shadow-sm border border-slate-200 rounded-xl px-4 py-2" placeholder="Ex: Need a Study Buddy" />
                 </div>
                 <div>
-                  <label className="block text-sm text-zinc-400 mb-1">Type</label>
-                  <select value={newPostContent.type} onChange={e => setNewPostContent({...newPostContent, type: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2">
+                  <label className="block text-sm text-slate-600 mb-1">Type</label>
+                  <select value={newPostContent.type} onChange={e => setNewPostContent({...newPostContent, type: e.target.value})} className="w-full bg-white shadow-sm border border-slate-200 rounded-xl px-4 py-2">
                     <option value="Offer">Offer</option>
                     <option value="Request">Request</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm text-zinc-400 mb-1">Tags (comma separated)</label>
-                  <input value={newPostContent.tags} onChange={e => setNewPostContent({...newPostContent, tags: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2" placeholder="React, Study, Tutor" />
+                  <label className="block text-sm text-slate-600 mb-1">Tags (comma separated)</label>
+                  <input value={newPostContent.tags} onChange={e => setNewPostContent({...newPostContent, tags: e.target.value})} className="w-full bg-white shadow-sm border border-slate-200 rounded-xl px-4 py-2" placeholder="React, Study, Tutor" />
                 </div>
                 <div className="flex gap-4 pt-4">
-                  <button type="button" onClick={() => setShowNewPostModal(false)} className="flex-1 py-2 text-zinc-400 hover:text-white">Cancel</button>
-                  <button type="submit" className="flex-1 bg-purple-500 hover:bg-purple-600 rounded-xl font-bold py-2">Post</button>
+                  <button type="button" onClick={() => setShowNewPostModal(false)} className="flex-1 py-2 text-slate-600 hover:text-slate-900">Cancel</button>
+                  <button type="submit" className="flex-1 bg-orange-500 hover:bg-orange-600 rounded-xl font-bold py-2">Post</button>
                 </div>
               </form>
             </motion.div>

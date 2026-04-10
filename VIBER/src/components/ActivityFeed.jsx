@@ -12,7 +12,7 @@ export default function ActivityFeed() {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold mb-8">Campus Pulse</h2>
-      <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl">
+      <div className="p-8 rounded-3xl bg-white shadow-sm border border-slate-200 backdrop-blur-xl">
         <div className="space-y-6">
           {activities.map((activity, i) => (
             <motion.div 
@@ -22,13 +22,13 @@ export default function ActivityFeed() {
               transition={{ delay: 0.2 + i * 0.1 }}
               className="flex items-start gap-4 relative group"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 rounded-2xl flex items-center justify-center flex-shrink-0 mt-1 border border-purple-500/30 group-hover:scale-110 transition-all">
-                <activity.icon className="w-5 h-5 text-purple-400" />
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-2xl flex items-center justify-center flex-shrink-0 mt-1 border border-orange-500/30 group-hover:scale-110 transition-all">
+                <activity.icon className="w-5 h-5 text-orange-600" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-white truncate">{activity.user}</p>
-                <p className="text-zinc-400 text-sm">{activity.action}</p>
-                <p className="text-xs text-purple-400 mt-1 font-medium">{activity.time}</p>
+                <p className="font-semibold text-slate-900 truncate">{activity.user}</p>
+                <p className="text-slate-600 text-sm">{activity.action}</p>
+                <p className="text-xs text-orange-600 mt-1 font-medium">{activity.time}</p>
               </div>
             </motion.div>
           ))}
