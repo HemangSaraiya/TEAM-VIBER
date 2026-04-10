@@ -103,4 +103,22 @@ router.get('/me', authenticateToken, async (req, res) => {
   }
 });
 
+// PUT /api/auth/me
+router.put('/me', authenticateToken, async (req, res) => {
+  const { name, major, year, skills } = req.body;
+  try {
+    const db = await openDb();
+    await db.run(
+      'UPDATE users SET name = ?, major = ?, year = ?, skills = ? WHERE id = ?',
+      [name, major, year, skills, req.user.id]
+    );
+    
+    const updatedUser = await db.get('SELECT id, name, email, major, year, skills, avatar FROM users WHERE id = ?', [req.user.id]);
+    res.json({ user: updatedUser });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
+
 export default router;

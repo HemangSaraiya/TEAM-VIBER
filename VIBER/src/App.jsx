@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import MessagesPage from './pages/MessagesPage';
 import ProfilePage from './pages/ProfilePage';
 
+import ResourcesPage from './pages/ResourcesPage';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 
@@ -56,10 +57,10 @@ export default function App() {
           <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} setUser={setUser} />} />
           <Route path="/signup" element={<SignupPage setIsAuthenticated={setIsAuthenticated} setUser={setUser} />} />
           <Route path="/dashboard/*" element={<Dashboard user={user} />} />
+          <Route path="/resources" element={<ResourcesPage user={user} />} />
           
-          
-          <Route path="/messages" element={<MessagesPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/messages" element={<MessagesPage user={user} />} />
+          <Route path="/profile" element={<ProfilePage user={user} />} />
         </Routes>
       </AnimatePresence>
     </div>

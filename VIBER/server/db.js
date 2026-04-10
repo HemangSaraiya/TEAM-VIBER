@@ -19,7 +19,8 @@ export async function initDb() {
       password TEXT NOT NULL,
       major TEXT,
       year TEXT,
-      avatar TEXT
+      avatar TEXT,
+      skills TEXT
     );
 
     CREATE TABLE IF NOT EXISTS resources (
@@ -31,7 +32,21 @@ export async function initDb() {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (author_id) REFERENCES users (id)
     );
+
+    CREATE TABLE IF NOT EXISTS messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      content TEXT NOT NULL,
+      author_id INTEGER NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (author_id) REFERENCES users (id)
+    );
   `);
+
+  try {
+    await db.exec("ALTER TABLE users ADD COLUMN skills TEXT;");
+  } catch (err) {
+    // Ignore error if column already exists
+  }
 
   return db;
 }
