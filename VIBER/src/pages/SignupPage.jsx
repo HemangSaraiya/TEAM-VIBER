@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Mail, User, Lock, GraduationCap, Calendar, Phone, CheckCircle, 
-  ArrowLeft, Shield, Zap 
+  ArrowLeft, ArrowRight, Shield, Zap 
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -49,19 +49,28 @@ export default function SignupPage({ setIsAuthenticated, setUser }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateStep()) {
-      // Mock signup
-      setIsAuthenticated(true);
-      setUser({ 
-        name: formData.name, 
-        email: formData.email,
-        avatar: formData.name.charAt(0),
-        major: formData.major,
-        year: formData.year
-      });
-      navigate('/dashboard');
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to register');
+        }
+        
+        localStorage.setItem('token', data.token);
+        setIsAuthenticated(true);
+        setUser(data.user);
+        navigate('/dashboard');
+      } catch (err) {
+        setErrors({ submit: err.message });
+      }
     }
   };
 
@@ -107,6 +116,11 @@ export default function SignupPage({ setIsAuthenticated, setUser }) {
 
         <div className="p-8 lg:p-12">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {errors.submit && (
+              <div className="bg-red-500/10 border border-red-500/50 text-red-500 text-sm p-4 rounded-xl text-center font-medium">
+                {errors.submit}
+              </div>
+            )}
             {step === 1 && (
               <>
                 <div>

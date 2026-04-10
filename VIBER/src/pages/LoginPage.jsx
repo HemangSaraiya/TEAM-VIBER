@@ -5,14 +5,32 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function LoginPage({ setIsAuthenticated, setUser }) {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Mock authentication
-    setIsAuthenticated(true);
-    setUser({ name: 'John Doe', avatar: 'JD', role: 'student' });
-    navigate('/dashboard');
+    setError('');
+    
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to login');
+      }
+      
+      localStorage.setItem('token', data.token);
+      setIsAuthenticated(true);
+      setUser(data.user);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -28,6 +46,11 @@ export default function LoginPage({ setIsAuthenticated, setUser }) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/50 text-red-500 text-sm p-3 rounded-lg text-center">
+              {error}
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium mb-2 text-zinc-300">Email</label>
             <div className="relative">

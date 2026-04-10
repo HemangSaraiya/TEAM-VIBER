@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { User, Clock, Tag } from 'lucide-react';
 
-export default function ResourceCard({ title, type, tags, author }) {
+export default function ResourceCard({ title, type, tags, author, onDelete }) {
   const typeColors = {
     Offer: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30 text-emerald-400',
     Request: 'from-orange-500/20 to-red-500/20 border-orange-500/30 text-orange-400'
@@ -19,8 +19,18 @@ export default function ResourceCard({ title, type, tags, author }) {
         <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${typeColors[type]}`}>
           {type}
         </span>
-        <div className="w-10 h-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl flex items-center justify-center group-hover:bg-purple-500/20 transition-all">
-          <User className="w-5 h-5 text-zinc-400 group-hover:text-purple-400" />
+        <div className="flex gap-2">
+          {onDelete && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); onDelete(); }}
+              className="w-10 h-10 bg-red-500/10 backdrop-blur-sm border border-red-500/20 rounded-2xl flex items-center justify-center hover:bg-red-500/30 transition-all text-red-500"
+            >
+              ×
+            </button>
+          )}
+          <div className="w-10 h-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl flex items-center justify-center group-hover:bg-purple-500/20 transition-all">
+            <User className="w-5 h-5 text-zinc-400 group-hover:text-purple-400" />
+          </div>
         </div>
       </div>
       
