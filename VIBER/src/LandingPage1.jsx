@@ -26,7 +26,7 @@ export default function LandingPage({ onEnter = () => {} }) {
           onClick={onEnter}
           className="px-5 py-2.5 text-sm font-medium bg-white/5 hover:bg-white/10 border border-white/10 rounded-full backdrop-blur-md transition-all duration-300"
         >
-          Enter Platform
+          Sign in
         </motion.button>
       </nav>
 
@@ -72,7 +72,7 @@ export default function LandingPage({ onEnter = () => {} }) {
           onClick={onEnter}
           className="group relative flex items-center gap-4 px-8 py-4 bg-white text-black rounded-full font-semibold text-lg overflow-hidden shadow-[0_0_40px_-10px_rgba(255,255,255,0.5)]"
         >
-          <span className="relative z-10">Deploy Now</span>
+          <span className="relative z-10">Sign Up</span>
           <div className="relative z-10 bg-black/10 rounded-full p-2 group-hover:bg-black/20 transition-colors">
             <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
           </div>

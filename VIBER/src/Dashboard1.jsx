@@ -39,7 +39,7 @@ export default function Dashboard({ onLogout }) {
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]">
               N
             </div>
-            <span className="hidden lg:block font-semibold tracking-wide">NexusEco</span>
+            <span className="hidden lg:block font-semibold tracking-wide">CamPus</span>
           </div>
 
           <nav className="space-y-2">
