@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Combine, Sparkles } from 'lucide-react';
 
-export default function LandingPage({ onEnter }) {
+export default function LandingPage({ onEnter = () => {} }) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
       {/* Background Glow */}
@@ -33,10 +33,10 @@ export default function LandingPage({ onEnter }) {
       {/* Hero Section */}
       <main className="relative z-10 flex flex-col justify-center items-center h-[calc(100vh-88px)] px-4 text-center">
         <motion.div
-           initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-           transition={{ duration: 0.8, ease: "easeOut" }}
-           className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-xs font-semibold uppercase tracking-widest mb-8 shadow-[0_0_30px_-5px_rgba(168,85,247,0.3)]"
+          initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-xs font-semibold uppercase tracking-widest mb-8 shadow-[0_0_30px_-5px_rgba(168,85,247,0.3)]"
         >
           <Sparkles className="w-4 h-4" />
           <span>The New Digital Frontier</span>
@@ -45,8 +45,8 @@ export default function LandingPage({ onEnter }) {
         <motion.h1 
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-          className="text-6xl md:text-8xl lg:text-[10rem] font-medium tracking-tighter leading-none mb-6"
+          transition={{ duration: 0.8, delay: 0.1, ease: 'easeOut' }}
+          className="text-5xl sm:text-6xl md:text-8xl lg:text-[10rem] font-medium tracking-tighter leading-none mb-6"
         >
           Coordinate.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-500 to-indigo-500">
@@ -58,7 +58,7 @@ export default function LandingPage({ onEnter }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-2xl text-lg md:text-xl text-zinc-400 mb-10 font-light"
+          className="max-w-2xl text-base md:text-lg lg:text-xl text-zinc-400 mb-10 font-light"
         >
           Join a dynamic ecosystem where resources flow organically. Connect, share, and build the future together in a beautifully seamless environment.
         </motion.p>
