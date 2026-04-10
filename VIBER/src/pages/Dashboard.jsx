@@ -12,8 +12,8 @@ const DUMMY_STATS = [
 ];
 
 const DUMMY_RESOURCES = [
-  { id: 1, title: 'Python Tutor for Data Science', type: 'Offer', tags: ['Tutoring', 'Python'], author: 'Sarah J.' },
-  { id: 2, title: 'Group Study for Algorithms', type: 'Request', tags: ['Study Group', 'Algorithms'], author: 'Mike R.' }
+  { id: 1, title: 'Python Tutor for Data Science', type: 'Offer', tags: ['Tutoring', 'Python'], author: 'Campus 1' },
+  { id: 2, title: 'Group Study for Algorithms', type: 'Request', tags: ['Study Group', 'Algorithms'], author: 'Campus 2' }
 ];
 
 export default function Dashboard() {
